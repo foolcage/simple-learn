@@ -1,3 +1,27 @@
+* [1. 问题](elastic-search.md#1-问题)
+   * [1.1 最快的查询？](elastic-search.md#11-最快的查询)
+   * [1.2 如何查(查询条件)？](elastic-search.md#12-如何查查询条件)
+      * [a. 全文搜索](elastic-search.md#a-全文搜索)
+      * [b. 结构化搜索](elastic-search.md#b-结构化搜索)
+   * [1.3 如何索引？](elastic-search.md#13-如何索引)
+      * [a. 索引的value(doc id or terms directly)](elastic-search.md#a-索引的valuedoc-id-or-terms-directly)
+      * [b. 索引的key(term的选取问题)](elastic-search.md#b-索引的keyterm的选取问题)
+* [2. 核心概念](elastic-search.md#2-核心概念)
+   * [2.1. 文档(document)](elastic-search.md#21-文档document)
+   * [2.2. 索引(index)](elastic-search.md#22-索引index)
+   * [2.3. 类型(type)](elastic-search.md#23-类型type)
+   * [2.4. 字段(field)](elastic-search.md#24-字段field)
+   * [2.5. 数据类型(filed type)](elastic-search.md#25-数据类型filed-type)
+   * [2.6. 映射(mapping)](elastic-search.md#26-映射mapping)
+   * [2.7. 单词(term)](elastic-search.md#27-单词term)
+* [3. 常用操作](elastic-search.md#3-常用操作)
+   * [3.1. 格式](elastic-search.md#31-格式)
+   * [3.2. create](elastic-search.md#32-create)
+   * [3.3. read(query)](elastic-search.md#33-readquery)
+   * [3.4. update](elastic-search.md#34-update)
+   * [3.5. delete](elastic-search.md#35-delete)
+   * [3.6. bulk](elastic-search.md#36-bulk)
+
 # 1. 问题
 
 ## 1.1 最快的查询？
@@ -32,30 +56,30 @@ term->doc id->doc terms
   2. term
   是否需要analyze成多个term来进行索引，搜索时也有这个选项:即是否
 
-# 1. 核心概念
-## 1.1. 文档(document)
+# 2. 核心概念
+## 2.1. 文档(document)
 
-## 1.2. 索引(index)
+## 2.2. 索引(index)
 
-## 1.3. 类型(type)
+## 2.3. 类型(type)
 
-## 1.4. 字段(field)
+## 2.4. 字段(field)
 
-## 1.5. 数据类型(filed type)
+## 2.5. 数据类型(filed type)
  * String
  * Numeric
  * Date
  * Boolean
 
-## 1.6. 映射(mapping)
+## 2.6. 映射(mapping)
 
-## 1.7. 单词(term)  
+## 2.7. 单词(term)  
 跟string相关，会对其进行分词等操作(analyze);索引时可指定analyzed (the default),
 not_analyzed, or no
 
-# 2. 常用操作
+# 3. 常用操作
 
-## 2.1. 格式
+## 3.1. 格式
 从rest接口的角度，操作形式如下:
 
 ```
@@ -70,7 +94,7 @@ curl -XGET 'localhost:9200/_cat/indices?v&pretty'
 ```bash
 curl -XGET 'localhost:9200/_cat/health?v&pretty'
 ```
-## 2.2. create
+## 3.2. create
 
 create index
 ```bash
@@ -102,14 +126,14 @@ curl -XPUT 'localhost:9200/customer/external/1?pretty&pretty' -H 'Content-Type: 
 curl -XGET 'localhost:9200/customer/external/1?pretty&pretty'
 ```
 
-## 2.3. read(query)
+## 3.3. read(query)
 query by id:
 ```bash
 
 curl -XGET 'localhost:9200/customer/external/1?pretty&pretty'
 
 ```
-## 2.4. update
+## 3.4. update
 
 update document:
 ```bash
@@ -127,7 +151,7 @@ curl -XPOST 'localhost:9200/customer/external/1/_update?pretty&pretty' -H 'Conte
 '
 
 ```
-## 2.5. delete
+## 3.5. delete
 
 ```bash
 
@@ -137,7 +161,7 @@ curl -XGET 'localhost:9200/_cat/indices?v&pretty'
 curl -XDELETE 'localhost:9200/customer/external/2?pretty&pretty'
 
 ```
-## 2.6. bulk
+## 3.6. bulk
 
 ```bash
 
