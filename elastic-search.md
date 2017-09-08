@@ -1,8 +1,78 @@
-# 1. 常用操作
+# 1. 问题
 
-### a. `create`
+## 1.1 最快的查询？
+在目前认知水平下，时间复杂度为O(1)的查询可认为最快的查询，构造这样的查询常用的方式即索引。
 
-create index:
+## 1.2 如何查(查询条件)？
+
+### a. 全文搜索
+比如普通的搜索引擎，你输入关键字"java"时,可以理解为全文索引，因为可能从"食物的表"去查，也可能从"编程语言的表"去查。
+### b. 结构化搜索
+查询条件里面包含了足够的信息去定位"表"。
+
+## 1.3 如何索引？
+如何索引，很大程度上由如何搜索决定；如何索引，决定了提供的搜索能力。  
+索引本质上是一个kv结构，根据k能够快速的找到v;  
+文档就是term(with filed)的集合,倒排后，value为文档id,key为term;  
+k->v->[kv]  
+term->doc id->doc terms  
+搜索，就是根据查询条件，得到term,从而找到相应的doc。
+
+关于如何索引，有如下选项
+### a. 索引的value(doc id or terms directly)  
+  解决如何找到document field的问题，是从整个文档(_source)里面查出来还是直接得到  
+  1. _source（全量）  
+  2. store(单独存储，从而直接得到)  
+  这个一般用默认即可，即_source
+
+### b. 索引的key(term的选取问题)
+  解决查询匹配空间的问题
+  1. _all（ignore field搜索时能搜到,相当于全文索引）
+  如果搜索总是指定field,可以设置为false  
+  2. term
+  是否需要analyze成多个term来进行索引，搜索时也有这个选项:即是否
+
+# 1. 核心概念
+## 1.1. 文档(document)
+
+## 1.2. 索引(index)
+
+## 1.3. 类型(type)
+
+## 1.4. 字段(field)
+
+## 1.5. 数据类型(filed type)
+ * String
+ * Numeric
+ * Date
+ * Boolean
+
+## 1.6. 映射(mapping)
+
+## 1.7. 单词(term)  
+跟string相关，会对其进行分词等操作(analyze);索引时可指定analyzed (the default),
+not_analyzed, or no
+
+# 2. 常用操作
+
+## 2.1. 格式
+从rest接口的角度，操作形式如下:
+
+```
+curl <REST Verb> /<Index>/<Type>/<ID>
+```
+由于URL路径代表了资源的层次，需要一些特殊路径来做"全局"的操作，比如：
+查询所有indices:
+```bash
+curl -XGET 'localhost:9200/_cat/indices?v&pretty'
+```
+健康检查:
+```bash
+curl -XGET 'localhost:9200/_cat/health?v&pretty'
+```
+## 2.2. create
+
+create index
 ```bash
 curl -XPUT 'localhost:9200/customer?pretty&pretty'
 
@@ -32,14 +102,14 @@ curl -XPUT 'localhost:9200/customer/external/1?pretty&pretty' -H 'Content-Type: 
 curl -XGET 'localhost:9200/customer/external/1?pretty&pretty'
 ```
 
-### b. `read(query)`
+## 2.3. read(query)
 query by id:
 ```bash
 
 curl -XGET 'localhost:9200/customer/external/1?pretty&pretty'
 
 ```
-### c. `update`
+## 2.4. update
 
 update document:
 ```bash
@@ -57,7 +127,7 @@ curl -XPOST 'localhost:9200/customer/external/1/_update?pretty&pretty' -H 'Conte
 '
 
 ```
-### d. `delete`
+## 2.5. delete
 
 ```bash
 
@@ -67,7 +137,7 @@ curl -XGET 'localhost:9200/_cat/indices?v&pretty'
 curl -XDELETE 'localhost:9200/customer/external/2?pretty&pretty'
 
 ```
-### f. `bulk`
+## 2.6. bulk
 
 ```bash
 
