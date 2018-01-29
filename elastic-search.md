@@ -133,6 +133,24 @@ query by id:
 curl -XGET 'localhost:9200/customer/external/1?pretty&pretty'
 
 ```
+
+query by term filter:
+```bash
+curl -XPOST 'localhost:9200/balance_sheet/_search?pretty' -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "term": {
+          "securityId": "stock_sz_000002"
+        }
+      }
+    }
+  }
+}
+'
+
+```
 ## 3.4. update
 
 update document:
@@ -159,6 +177,16 @@ curl -XDELETE 'localhost:9200/customer?pretty&pretty'
 curl -XGET 'localhost:9200/_cat/indices?v&pretty'
 
 curl -XDELETE 'localhost:9200/customer/external/2?pretty&pretty'
+
+```
+
+delete by query  
+```bash
+curl -XPOST 'localhost:9200/stock_sz_000002_bfq_day_kdata/_delete_by_query?pretty' -H 'Content-Type: application/json' -d'
+{"query": {"match_all": {}}}
+
+ curl -XPOST 'localhost:9200/account/_delete_by_query?pretty' -H 'Content-Type: application/json' -d'
+ {"query": {"term": {"traderId": "aa"}}}'
 
 ```
 ## 3.6. bulk
